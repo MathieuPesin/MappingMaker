@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { suppressWebSocketWarnings } from './utils/devUtils';
+
+// Supprime les avertissements WebSocket en développement
+suppressWebSocketWarnings();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
