@@ -5,7 +5,8 @@ import AnimatedBackground from './AnimatedBackground';
 import Logo from './Logo';
 
 const LandingPage = ({ onStarted }) => {
-  const colors = d3.scaleOrdinal(d3.schemeSet3);
+  // eslint-disable-next-line no-unused-vars
+  const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100">

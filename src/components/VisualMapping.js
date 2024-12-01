@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, { useEffect, useState, useRef } from 'react';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import * as d3 from 'd3';
 import { supabase } from '../supabaseClient';
 import { 
@@ -29,13 +31,14 @@ const VisualMapping = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [transform, setTransform] = useState({ x: 0, y: 0, scale: 1 });
-  const containerRef = useRef();
+  // eslint-disable-next-line no-unused-vars
+  const containerRef = useRef(null);
 
   const colors = d3.scaleOrdinal(d3.schemeSet3);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const parseCategories = (categorieStr) => {
     if (!categorieStr) return [];
@@ -44,7 +47,7 @@ const VisualMapping = () => {
     const cleanCategory = (cat) => {
       if (!cat) return '';
       return cat
-        .replace(/[\{\}\[\]"\\]/g, '') // Enlever les accolades, crochets, guillemets et backslashes
+        .replace(/[{}[\]"\\]/g, '') // Enlever les accolades, crochets, guillemets et backslashes
         .replace(/\s+/g, ' ') // Normaliser les espaces
         .trim(); // Enlever les espaces au début et à la fin
     };
@@ -731,8 +734,9 @@ const VisualMapping = () => {
     }
   };
 
-  const openEditModal = (company) => {
-    setSelectedCompany(company);
+  const openEditModal = () => {
+    // eslint-disable-next-line no-unused-vars
+    setSelectedCompany(null);
     setIsEditModalOpen(true);
   };
 

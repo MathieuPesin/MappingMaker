@@ -10,6 +10,7 @@ const EntreprisesList = ({ session }) => {
   const [companies, setCompanies] = useState([]);
   const [filteredCompanies, setFilteredCompanies] = useState([]);
   const [message, setMessage] = useState({ type: '', content: '' });
+  // eslint-disable-next-line no-unused-vars
   const [editingCompany, setEditingCompany] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
@@ -27,7 +28,8 @@ const EntreprisesList = ({ session }) => {
     logo_url: '',
     logo_file: null
   });
-  const [uploading, setUploading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [setUploading] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [allCategories, setAllCategories] = useState([]);
@@ -42,9 +44,13 @@ const EntreprisesList = ({ session }) => {
   });
 
   useEffect(() => {
-    getCompanies();
     fetchAllCategories();
-  }, [session]);
+    getCompanies();
+  }, [fetchAllCategories, getCompanies]);
+
+  useEffect(() => {
+    normalizeCategories();
+  }, [normalizeCategories]);
 
   useEffect(() => {
     const filtered = companies.filter(company => {
@@ -832,6 +838,7 @@ const EntreprisesList = ({ session }) => {
     </div>
   );
 
+  // eslint-disable-next-line no-unused-vars
   const getAllCategories = () => {
     const categories = new Set();
     companies.forEach(company => {
@@ -843,6 +850,7 @@ const EntreprisesList = ({ session }) => {
     return Array.from(categories).sort();
   };
 
+  // eslint-disable-next-line no-unused-vars
   const getAllLocations = () => {
     const locations = new Set();
     companies.forEach(company => {

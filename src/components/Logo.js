@@ -4,6 +4,7 @@ const Logo = ({ size, className = "" }) => {
   const svgRef = useRef(null);
   const requestRef = useRef(null);
   const angleRef = useRef(0);
+  // eslint-disable-next-line no-unused-vars
   const [isHovered, setIsHovered] = useState(false);
 
   const getCirclePoints = (angle) => ({
@@ -55,7 +56,10 @@ const Logo = ({ size, className = "" }) => {
   };
 
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(animate);
+    animate();
+  }, [animate]);
+
+  useEffect(() => {
     return () => {
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);

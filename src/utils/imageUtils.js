@@ -39,7 +39,8 @@ export const uploadImage = async (file) => {
     const fileName = generateFileName(file);
     console.log('Uploading file:', fileName);
     
-    const { error: uploadError, data } = await supabase.storage
+    // eslint-disable-next-line no-unused-vars
+    const { data, error: uploadError } = await supabase.storage
       .from(STORAGE_BUCKET)
       .upload(fileName, file, {
         cacheControl: '3600',
