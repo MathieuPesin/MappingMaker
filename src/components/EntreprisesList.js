@@ -6,20 +6,45 @@ import ImportCSV from './ImportCSV';
 import * as d3 from 'd3';
 
 const EntreprisesList = ({ session }) => {
-  const [loading, setLoading] = useState(true);
+  // États de base
   const [companies, setCompanies] = useState([]);
   const [filteredCompanies, setFilteredCompanies] = useState([]);
   const [message, setMessage] = useState({ type: '', content: '' });
-  // eslint-disable-next-line no-unused-vars
   const [editingCompany, setEditingCompany] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     categories: [],
     locations: []
   });
-  const [showFilters, setShowFilters] = useState(false);
+
+  // États pour le chargement et l'upload
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  // États pour les modales
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // États pour les catégories
+  const [allCategories, setAllCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState('');
+
+  // État pour la nouvelle entreprise
+  const [newCompany, setNewCompany] = useState({
+    name: '',
+    description: '',
+    website: '',
+    location: '',
+    categories: [],
+    logo_url: '',
+    logo_file: null
+  });
+
+  // État pour l'entreprise en cours de modification
   const [editForm, setEditForm] = useState({
+    id: '',
     nom: '',
     description: '',
     categorie: [],
@@ -28,10 +53,7 @@ const EntreprisesList = ({ session }) => {
     logo_url: '',
     logo_file: null
   });
-  const [uploading, setUploading] = useState(false);
-  const [showImportModal, setShowImportModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [allCategories, setAllCategories] = useState([]);
+
   const [addForm, setAddForm] = useState({
     nom: '',
     description: '',
@@ -194,9 +216,8 @@ const EntreprisesList = ({ session }) => {
   };
 
   const getCompanies = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      
       if (!session?.user?.id) {
         console.error('No user session found');
         setCompanies([]);
@@ -227,18 +248,13 @@ const EntreprisesList = ({ session }) => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
-      const { error } = await supabase
-        .from('entreprises')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-      setCompanies(companies.filter(company => company.id !== id));
-      setMessage({ type: 'success', content: 'Entreprise supprimée avec succès' });
+      // ... code existant ...
     } catch (error) {
+      console.error('Error:', error);
       setMessage({ type: 'error', content: error.message });
     } finally {
       setLoading(false);
@@ -247,10 +263,8 @@ const EntreprisesList = ({ session }) => {
 
   const handleSubmitAdd = async (e) => {
     e.preventDefault();
+    setUploading(true);
     try {
-      setLoading(true);
-      setMessage({ type: 'info', content: 'Ajout de l\'entreprise en cours...' });
-
       if (!session?.user?.id) {
         setMessage({ type: 'error', content: 'Veuillez vous connecter pour ajouter une entreprise' });
         return;
@@ -301,16 +315,14 @@ const EntreprisesList = ({ session }) => {
       console.error('Error adding company:', error);
       setMessage({ type: 'error', content: error.message });
     } finally {
-      setLoading(false);
+      setUploading(false);
     }
   };
 
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
-      setMessage({ type: 'info', content: 'Mise à jour de l\'entreprise en cours...' });
-
       if (!session?.user?.id) {
         setMessage({ type: 'error', content: 'Veuillez vous connecter pour modifier une entreprise' });
         return;
@@ -337,6 +349,24 @@ const EntreprisesList = ({ session }) => {
       await getCompanies();
     } catch (error) {
       console.error('Error updating company:', error);
+      setMessage({ type: 'error', content: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('entreprises')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      setCompanies(companies.filter(company => company.id !== id));
+      setMessage({ type: 'success', content: 'Entreprise supprimée avec succès' });
+    } catch (error) {
       setMessage({ type: 'error', content: error.message });
     } finally {
       setLoading(false);
@@ -1153,10 +1183,10 @@ const EntreprisesList = ({ session }) => {
                       </button>
                       <button
                         type="submit"
-                        disabled={loading || uploading}
+                        disabled={loading}
                         className="inline-flex justify-center rounded-lg border border-transparent bg-gradient-to-r from-green-400 to-green-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:from-green-500 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {loading || uploading ? 'Enregistrement...' : 'Enregistrer'}
+                        {loading ? 'Enregistrement...' : 'Enregistrer'}
                       </button>
                     </div>
                   </form>
