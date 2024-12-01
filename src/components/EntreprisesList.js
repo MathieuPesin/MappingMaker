@@ -12,6 +12,7 @@ const EntreprisesList = ({ session }) => {
   const [message, setMessage] = useState({ type: '', content: '' });
   const [editingCompany, setEditingCompany] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     categories: [],
     locations: []
