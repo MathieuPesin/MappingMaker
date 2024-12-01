@@ -28,8 +28,7 @@ const EntreprisesList = ({ session }) => {
     logo_url: '',
     logo_file: null
   });
-  // eslint-disable-next-line no-unused-vars
-  const [setUploading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [allCategories, setAllCategories] = useState([]);
